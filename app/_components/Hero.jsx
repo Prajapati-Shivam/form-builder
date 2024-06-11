@@ -18,7 +18,7 @@ const Hero = () => {
 
           <div className='mt-8 flex flex-wrap justify-center gap-4'>
             <Link href='#'>
-              <Button>Get Started</Button>
+              <Button>Create AI Form</Button>
             </Link>
             <Link href='#'>
               <Button variant='outline'>Learn More</Button>
