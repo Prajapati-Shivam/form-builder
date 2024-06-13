@@ -11,8 +11,9 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
+import EditField from './EditField';
 
-const Form = ({ form }) => {
+const Form = ({ form, handleUpdate, deleteField }) => {
   return (
     <div className='border p-5 rounded-lg md:min-w-[600px]'>
       <h2 className='font-bold text-2xl text-center text-primary'>
@@ -21,10 +22,17 @@ const Form = ({ form }) => {
       <p className='text-md text-center text-gray-600'>{form.description}</p>
       <div className='mt-5'>
         {form.fields.map((field, index) => (
-          <div key={index}>
+          <div key={index} className='flex items-start'>
             {field.type === 'select' ? (
-              <div className='my-4'>
-                <Label>{field.label}</Label>
+              <div className='my-4 w-full'>
+                <div className='flex items-center justify-between mb-2'>
+                  <Label>{field.label}</Label>
+                  <EditField
+                    defaultValue={field}
+                    updateFields={(value) => handleUpdate(value, index)}
+                    deleteField={() => deleteField(index)}
+                  />
+                </div>
                 <Select>
                   <SelectTrigger>
                     <SelectValue placeholder='Select an option' />
@@ -39,8 +47,15 @@ const Form = ({ form }) => {
                 </Select>
               </div>
             ) : field.type === 'checkbox' ? (
-              <div className='my-4'>
-                <Label>{field.label}</Label>
+              <div className='my-4 w-full'>
+                <div className='flex items-center justify-between'>
+                  <Label>{field.label}</Label>
+                  <EditField
+                    defaultValue={field}
+                    updateFields={(value) => handleUpdate(value, index)}
+                    deleteField={() => deleteField(index)}
+                  />
+                </div>
                 {field.options.map((option, optionIndex) => (
                   <div
                     className='flex items-center space-x-2 my-2'
@@ -52,8 +67,15 @@ const Form = ({ form }) => {
                 ))}
               </div>
             ) : field.type === 'radio' ? (
-              <div className='my-4'>
-                <Label>{field.label}</Label>
+              <div className='my-4 w-full'>
+                <div className='flex items-center justify-between'>
+                  <Label>{field.label}</Label>
+                  <EditField
+                    defaultValue={field}
+                    updateFields={(value) => handleUpdate(value, index)}
+                    deleteField={() => deleteField(index)}
+                  />
+                </div>
                 <RadioGroup>
                   {field.options.map((option, optionIndex) => (
                     <RadioGroupItem key={optionIndex} value={option.value}>
@@ -63,8 +85,15 @@ const Form = ({ form }) => {
                 </RadioGroup>
               </div>
             ) : (
-              <div className='my-4'>
-                <Label>{field.label}</Label>
+              <div className='my-4 w-full'>
+                <div className='flex items-center justify-between'>
+                  <Label>{field.label}</Label>
+                  <EditField
+                    defaultValue={field}
+                    updateFields={(value) => handleUpdate(value, index)}
+                    deleteField={() => deleteField(index)}
+                  />
+                </div>
                 <Input
                   type={field.type}
                   placeholder={field.placeholder}

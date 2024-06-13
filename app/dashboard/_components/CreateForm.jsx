@@ -18,6 +18,7 @@ import { JsonForms } from '@/configs/schema';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 function CreateForm() {
   const { user } = useUser();
@@ -38,7 +39,6 @@ function CreateForm() {
       let jsonString = result.response.text().toString();
       jsonString = jsonString.replace(/^```json/, '');
       jsonString = jsonString.replace(/```$/, '');
-      console.log(jsonString);
       const response = await db
         .insert(JsonForms)
         .values({
@@ -50,9 +50,10 @@ function CreateForm() {
       if (response[0].id) {
         navigate.push(`/edit-form/${response[0].id}`);
       }
+      toast.success('Form created successfully');
     } catch (error) {
       console.log(error);
-      alert('An error occurred. Please try again later.');
+      toast.error('Failed to create form');
     } finally {
       setLoading(false);
       setOpen(false);
