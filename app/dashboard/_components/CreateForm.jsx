@@ -34,15 +34,19 @@ function CreateForm() {
       const result = await chatSession.sendMessage(
         'Description: ' + prompt + ' ' + COMMAND
       );
+
+      let jsonString = result.response.text().toString();
+      jsonString = jsonString.replace(/^```json/, '');
+      jsonString = jsonString.replace(/```$/, '');
+      console.log(jsonString);
       const response = await db
         .insert(JsonForms)
         .values({
-          jsonform: result.response.text(),
+          jsonform: jsonString,
           createdBy: user?.primaryEmailAddress?.emailAddress,
           createdAt: moment().format('DD/MM/YYYY'),
         })
         .returning({ id: JsonForms.id });
-      console.log('form id: ', response[0].id);
       if (response[0].id) {
         navigate.push(`/edit-form/${response[0].id}`);
       }

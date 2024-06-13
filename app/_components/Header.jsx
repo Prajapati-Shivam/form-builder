@@ -10,7 +10,13 @@ const Header = () => {
   return (
     <div className='border-b p-5 shadow-sm'>
       <div className='flex items-center justify-between'>
-        <Image src='logo.svg' alt='logo' width='100' height='100' />
+        <Image
+          src='./logo.svg'
+          alt='logo'
+          width='0'
+          height='0'
+          className='w-28 h-auto'
+        />
         {isSignedIn ? (
           <div className='flex items-center gap-x-4'>
             <Link href={'/dashboard'}>
