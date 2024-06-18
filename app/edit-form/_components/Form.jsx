@@ -13,13 +13,13 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
 import EditField from './EditField';
 
-const Form = ({ form, handleUpdate, deleteField }) => {
+const Form = ({ form, handleUpdate, deleteField, theme }) => {
   return (
-    <div className='border p-5 rounded-lg md:min-w-[600px]'>
-      <h2 className='font-bold text-2xl text-center text-primary'>
+    <div className='border p-5 rounded-lg md:min-w-[600px]' data-theme={theme}>
+      <h2 className='font-bold text-2xl text-center text-inherit'>
         {form.title}
       </h2>
-      <p className='text-md text-center text-gray-600'>{form.description}</p>
+      <p className='text-md text-center text-gray-400'>{form.description}</p>
       <div className='mt-5'>
         {form.fields.map((field, index) => (
           <div key={index} className='flex items-start'>
@@ -105,6 +105,7 @@ const Form = ({ form, handleUpdate, deleteField }) => {
             )}
           </div>
         ))}
+        <button className='btn btn-primary'>Submit</button>
       </div>
     </div>
   );
