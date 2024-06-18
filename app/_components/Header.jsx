@@ -3,10 +3,22 @@ import { Button } from '@/components/ui/button';
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 const Header = () => {
   const { user, isSignedIn } = useUser();
+  const path = usePathname();
+  const pathsToExclude = ['/aiform', '/sign-in', '/sign-up'];
+
+  const shouldExcludeHeader = pathsToExclude.some((excludedPath) =>
+    path.includes(excludedPath)
+  );
+
+  if (shouldExcludeHeader) {
+    return null;
+  }
+
   return (
     <div className='border-b p-5 shadow-sm'>
       <div className='flex items-center justify-between'>
