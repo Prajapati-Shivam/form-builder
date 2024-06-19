@@ -19,6 +19,7 @@ const EditForm = ({ params }) => {
   const [selectedBackground, setSelectedBackground] = useState('none');
   const [jsonForm, setJsonForm] = useState(null);
   const [record, setRecord] = useState(null);
+  const [updateTrigger, setUpdateTrigger] = useState(undefined);
 
   useEffect(() => {
     const getFormData = async () => {
