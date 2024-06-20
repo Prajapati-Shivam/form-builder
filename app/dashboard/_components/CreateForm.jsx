@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -24,7 +25,6 @@ function CreateForm() {
   const { user } = useUser();
   const navigate = useRouter();
   const [userInput, setUserInput] = useState('');
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const COMMAND =
     'on basis of the description provided, create a form in JSON format with a title, description, and fields like field name, placeholder, label, type, and required. Give response in json format only';
@@ -39,9 +39,11 @@ function CreateForm() {
       let jsonString = result.response.text().toString();
       jsonString = jsonString.replace(/^```json/, '');
       jsonString = jsonString.replace(/```$/, '');
+      let formTitle = JSON.parse(jsonString).title;
       const response = await db
         .insert(JsonForms)
         .values({
+          title: formTitle,
           jsonform: jsonString,
           createdBy: user?.primaryEmailAddress?.emailAddress,
           createdAt: moment().format('DD/MM/YYYY'),
@@ -56,13 +58,12 @@ function CreateForm() {
       toast.error('Failed to create form');
     } finally {
       setLoading(false);
-      setOpen(false);
     }
   };
   return (
-    <Dialog open={open}>
+    <Dialog>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)}>+ Create Form</Button>
+        <Button>+ Create Form</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -77,13 +78,9 @@ function CreateForm() {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button
-            type='submit'
-            variant='destructive'
-            onClick={() => setOpen(false)}
-          >
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button variant='destructive'>Cancel</Button>
+          </DialogClose>
           <Button disabled={loading} onClick={() => handleSubmit(userInput)}>
             {loading ? (
               <>

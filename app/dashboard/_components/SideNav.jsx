@@ -1,4 +1,5 @@
 'use client';
+import { useFormStore } from '@/app/_store/FormStore';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { LibraryBig, LineChart, MessageSquare, Shield } from 'lucide-react';
@@ -34,6 +35,7 @@ function SideNav() {
   ];
   const path = usePathname();
   useEffect(() => {}, [path]);
+  const forms = useFormStore((state) => state.forms);
   return (
     <div className='border-2 shadow-md h-screen'>
       <div className='p-4'>
@@ -52,9 +54,10 @@ function SideNav() {
       <div className='fixed bottom-0 p-4 w-64'>
         <Button className='w-full'>+ Create Form</Button>
         <div className='my-4'>
-          <Progress value={70} />
+          <Progress value={(forms.length / 3) * 100} />
           <p className='mt-2 text-gray-600 text-sm'>
-            <strong>2</strong> out of <strong>3</strong> forms created
+            <strong>{forms.length}</strong> out of <strong>3</strong> forms
+            created
           </p>
           <p className='text-sm text-gray-600 mt-2'>
             <strong>Upgrade</strong> to create unlimited forms

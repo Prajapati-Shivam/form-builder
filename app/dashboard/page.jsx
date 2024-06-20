@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import CreateForm from './_components/CreateForm';
 import {
   Table,
@@ -15,11 +15,14 @@ import { JsonForms } from '@/configs/schema';
 import { eq } from 'drizzle-orm';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import { useFormStore } from '../_store/FormStore';
+import DeleteForm from './_components/DeleteForm';
 
 const Dashboard = () => {
-  const [forms, setForms] = useState([]);
   const { user } = useUser();
   const navigate = useRouter();
+  const forms = useFormStore((state) => state.forms);
+  const setForms = useFormStore((state) => state.setForms);
 
   useEffect(() => {
     const getFormData = async () => {
@@ -42,7 +45,7 @@ const Dashboard = () => {
     };
 
     getFormData();
-  }, [user?.primaryEmailAddress?.emailAddress]);
+  }, [user?.primaryEmailAddress?.emailAddress, setForms]);
 
   return (
     <div className='p-6'>
@@ -58,20 +61,39 @@ const Dashboard = () => {
               <TableHead className='w-[100px]'>Sr. No.</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Created By</TableHead>
-              <TableHead className='text-right'>Date</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead className='text-right'>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {forms.map((form, index) => (
               <TableRow
-                key={index}
-                onClick={() => navigate.push('/edit-form/' + form.id)}
+                key={form.id}
                 className='cursor-pointer hover:text-primary'
               >
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>Form {index + 1}</TableCell>
-                <TableCell>{form.createdBy}</TableCell>
-                <TableCell className='text-right'>{form.createdAt}</TableCell>
+                <TableCell
+                  onClick={() => navigate.push('/edit-form/' + form.id)}
+                >
+                  {index + 1}
+                </TableCell>
+                <TableCell
+                  onClick={() => navigate.push('/edit-form/' + form.id)}
+                >
+                  {form?.title || `Form ${index + 1}`}
+                </TableCell>
+                <TableCell
+                  onClick={() => navigate.push('/edit-form/' + form.id)}
+                >
+                  {form.createdBy}
+                </TableCell>
+                <TableCell
+                  onClick={() => navigate.push('/edit-form/' + form.id)}
+                >
+                  {form.createdAt}
+                </TableCell>
+                <TableCell className='text-right'>
+                  <DeleteForm formId={form.id} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

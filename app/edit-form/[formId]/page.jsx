@@ -11,15 +11,18 @@ import { toast } from 'sonner';
 import Controller from '../_components/Controller';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { useFormStore } from '@/app/_store/FormStore';
 
 const EditForm = ({ params }) => {
   const { user } = useUser();
   const navigate = useRouter();
   const [selectedTheme, setSelectedTheme] = useState('light');
   const [selectedBackground, setSelectedBackground] = useState('none');
+  const [formTitle, setFormTitle] = useState('');
   const [jsonForm, setJsonForm] = useState(null);
   const [record, setRecord] = useState(null);
   const [updateTrigger, setUpdateTrigger] = useState(undefined);
+  const setForms = useFormStore((state) => state.setForms);
 
   useEffect(() => {
     const getFormData = async () => {
@@ -38,8 +41,10 @@ const EditForm = ({ params }) => {
 
         if (form && form.length > 0) {
           const formRecord = form[0];
+          setForms(form); // update Zustand store with the form data
           setRecord(formRecord);
           setJsonForm(JSON.parse(formRecord.jsonform));
+          setFormTitle(formRecord.title);
           setSelectedTheme(formRecord.theme);
           setSelectedBackground(formRecord.background);
         }
@@ -50,9 +55,8 @@ const EditForm = ({ params }) => {
         );
       }
     };
-
     getFormData();
-  }, [params?.formId, user?.primaryEmailAddress?.emailAddress]);
+  }, [params.formId, user?.primaryEmailAddress?.emailAddress, setForms]);
 
   useEffect(() => {
     if (updateTrigger !== undefined) {
@@ -60,19 +64,31 @@ const EditForm = ({ params }) => {
     }
   }, [updateTrigger]);
 
-  const handleUpdate = (value, index) => {
-    const updatedForm = { ...jsonForm };
-    updatedForm.fields[index].label = value.label;
-    updatedForm.fields[index].placeholder = value.placeholder;
-    setJsonForm(updatedForm);
-    setUpdateTrigger(Date.now());
+  const updateField = (value, index) => {
+    try {
+      const updatedForm = { ...jsonForm };
+      updatedForm.fields[index] = value;
+      setJsonForm(updatedForm);
+      setForms((forms) =>
+        forms.map((f) => (f.id === record.id ? updatedForm : f))
+      ); // update Zustand store
+      setUpdateTrigger(Date.now());
+    } catch (error) {
+      console.error('Error updating field:', error);
+      toast('An error occurred. Please try again later');
+    }
   };
 
   const updateJsonFormInDb = async () => {
     try {
       await db
         .update(JsonForms)
-        .set({ jsonform: JSON.stringify(jsonForm) })
+        .set({
+          title: formTitle,
+          jsonform: JSON.stringify(jsonForm),
+          theme: selectedTheme,
+          background: selectedBackground,
+        })
         .where(
           and(
             eq(JsonForms.id, record.id),
@@ -92,6 +108,9 @@ const EditForm = ({ params }) => {
       const updatedForm = { ...jsonForm };
       updatedForm.fields.splice(index, 1);
       setJsonForm(updatedForm);
+      setForms((forms) =>
+        forms.map((f) => (f.id === record.id ? updatedForm : f))
+      ); // update Zustand store
       setUpdateTrigger(Date.now());
       toast('Field deleted successfully');
     } catch (error) {
@@ -163,7 +182,7 @@ const EditForm = ({ params }) => {
             <Form
               form={jsonForm}
               theme={selectedTheme}
-              handleUpdate={handleUpdate}
+              updateField={updateField}
               deleteField={deleteField}
             />
           ) : (
