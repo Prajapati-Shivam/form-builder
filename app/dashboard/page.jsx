@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CreateForm from './_components/CreateForm';
 import {
   Table,
@@ -21,6 +21,7 @@ import DeleteForm from './_components/DeleteForm';
 const Dashboard = () => {
   const { user } = useUser();
   const navigate = useRouter();
+  const [loading, setLoading] = useState(false);
   const forms = useFormStore((state) => state.forms);
   const setForms = useFormStore((state) => state.setForms);
 
@@ -29,6 +30,7 @@ const Dashboard = () => {
       if (!user?.primaryEmailAddress?.emailAddress) return;
 
       try {
+        setLoading(true);
         const form = await db
           .select()
           .from(JsonForms)
@@ -41,6 +43,8 @@ const Dashboard = () => {
         }
       } catch (error) {
         console.error('Error fetching forms:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -66,36 +70,54 @@ const Dashboard = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {forms.map((form, index) => (
-              <TableRow
-                key={form.id}
-                className='cursor-pointer hover:text-primary'
-              >
-                <TableCell
-                  onClick={() => navigate.push('/edit-form/' + form.id)}
-                >
-                  {index + 1}
-                </TableCell>
-                <TableCell
-                  onClick={() => navigate.push('/edit-form/' + form.id)}
-                >
-                  {form?.title || `Form ${index + 1}`}
-                </TableCell>
-                <TableCell
-                  onClick={() => navigate.push('/edit-form/' + form.id)}
-                >
-                  {form.createdBy}
-                </TableCell>
-                <TableCell
-                  onClick={() => navigate.push('/edit-form/' + form.id)}
-                >
-                  {form.createdAt}
-                </TableCell>
-                <TableCell className='text-right'>
-                  <DeleteForm formId={form.id} />
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={5} className='text-center'>
+                  Loading...
                 </TableCell>
               </TableRow>
-            ))}
+            ) : forms.length > 0 ? (
+              forms.map((form, index) => (
+                <TableRow
+                  key={form.id}
+                  className='cursor-pointer hover:text-primary'
+                >
+                  <TableCell
+                    onClick={() => navigate.push(`/edit-form/${form.id}`)}
+                  >
+                    {index + 1}
+                  </TableCell>
+                  <TableCell
+                    onClick={() => navigate.push(`/edit-form/${form.id}`)}
+                  >
+                    {form.title}
+                  </TableCell>
+                  <TableCell
+                    className='group'
+                    onClick={() => navigate.push(`/edit-form/${form.id}`)}
+                  >
+                    <span className='group-hover:hidden'>{form.createdBy}</span>
+                    <span className='hidden group-hover:block'>
+                      {user?.fullName}
+                    </span>
+                  </TableCell>
+                  <TableCell
+                    onClick={() => navigate.push(`/edit-form/${form.id}`)}
+                  >
+                    {form.createdAt}
+                  </TableCell>
+                  <TableCell className='text-right'>
+                    <DeleteForm form={form} />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className='text-center'>
+                  No forms found. Create a new form to get started.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>

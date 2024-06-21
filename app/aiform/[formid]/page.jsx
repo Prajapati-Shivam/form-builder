@@ -3,12 +3,13 @@ import Form from '@/app/edit-form/_components/Form';
 import { db } from '@/configs';
 import { JsonForms } from '@/configs/schema';
 import { and, eq } from 'drizzle-orm';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 const LivePreview = ({ params }) => {
   const [jsonForm, setJsonForm] = useState(null);
   const [record, setRecord] = useState(null); // Initialize to null
-
+  let url = 'http:localhost:3000/dashboard';
   useEffect(() => {
     const GetFormData = async () => {
       const form = await db
@@ -36,11 +37,16 @@ const LivePreview = ({ params }) => {
         <Form
           form={jsonForm}
           theme={record?.theme}
-          handleUpdate={() => console.log()}
+          updateField={() => console.log()}
           deleteField={() => console.log()}
           editable={false}
         />
       )}
+      <Link href={url}>
+        <div className='flex bg-gray-900 text-blue-200 text-sm p-3 fixed bottom-4 left-4 rounded-full'>
+          ✨ Build your AI form with formable.
+        </div>
+      </Link>
     </div>
   );
 };

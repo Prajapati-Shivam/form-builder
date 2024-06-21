@@ -48,9 +48,15 @@ const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
         {form.fields.map((field, index) => (
           <div key={index} className='flex items-start'>
             {field.type === 'select' ? (
-              <div className='my-4 w-full'>
+              <div className='my-4 w-full text-gray-900'>
                 <div className='flex items-center justify-between mb-2'>
-                  <Label>{field.label}</Label>
+                  <Label
+                    style={{
+                      color: themeData['neutral-content'],
+                    }}
+                  >
+                    {field.label}
+                  </Label>
                   {editable && (
                     <EditField
                       defaultValue={field}
