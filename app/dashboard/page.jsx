@@ -1,15 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import CreateForm from './_components/CreateForm';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+
 import { db } from '@/configs';
 import { JsonForms } from '@/configs/schema';
 import { eq } from 'drizzle-orm';
@@ -17,6 +9,7 @@ import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useFormStore } from '../_store/FormStore';
 import DeleteForm from './_components/DeleteForm';
+import FormListItem from './_components/FormListItem';
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -24,7 +17,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const forms = useFormStore((state) => state.forms);
   const setForms = useFormStore((state) => state.setForms);
-
   useEffect(() => {
     const getFormData = async () => {
       if (!user?.primaryEmailAddress?.emailAddress) return;
@@ -57,69 +49,18 @@ const Dashboard = () => {
         <h2 className='text-3xl font-bold'>Dashboard</h2>
         <CreateForm />
       </div>
-      <div className='mt-6'>
-        <Table>
-          <TableCaption>A list of your created forms.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className='w-[100px]'>Sr. No.</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Created By</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className='text-right'>Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={5} className='text-center'>
-                  Loading...
-                </TableCell>
-              </TableRow>
-            ) : forms.length > 0 ? (
-              forms.map((form, index) => (
-                <TableRow
-                  key={form.id}
-                  className='cursor-pointer hover:text-primary'
-                >
-                  <TableCell
-                    onClick={() => navigate.push(`/edit-form/${form.id}`)}
-                  >
-                    {index + 1}
-                  </TableCell>
-                  <TableCell
-                    onClick={() => navigate.push(`/edit-form/${form.id}`)}
-                  >
-                    {form.title}
-                  </TableCell>
-                  <TableCell
-                    className='group'
-                    onClick={() => navigate.push(`/edit-form/${form.id}`)}
-                  >
-                    <span className='group-hover:hidden'>{form.createdBy}</span>
-                    <span className='hidden group-hover:block'>
-                      {user?.fullName}
-                    </span>
-                  </TableCell>
-                  <TableCell
-                    onClick={() => navigate.push(`/edit-form/${form.id}`)}
-                  >
-                    {form.createdAt}
-                  </TableCell>
-                  <TableCell className='text-right'>
-                    <DeleteForm form={form} />
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} className='text-center'>
-                  No forms found. Create a new form to get started.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+      <div className='mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+        {loading ? (
+          <p>loading...</p>
+        ) : forms.length > 0 ? (
+          forms.map((form) => (
+            <div key={form.id}>
+              <FormListItem form={JSON.parse(form.jsonform)} formId={form.id} />
+            </div>
+          ))
+        ) : (
+          <p>No forms found</p>
+        )}
       </div>
     </div>
   );

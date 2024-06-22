@@ -9,7 +9,6 @@ import React, { useEffect, useState } from 'react';
 const LivePreview = ({ params }) => {
   const [jsonForm, setJsonForm] = useState(null);
   const [record, setRecord] = useState(null); // Initialize to null
-  let url = 'http:localhost:3000/dashboard';
   useEffect(() => {
     const GetFormData = async () => {
       const form = await db
@@ -40,12 +39,14 @@ const LivePreview = ({ params }) => {
           updateField={() => console.log()}
           deleteField={() => console.log()}
           editable={false}
+          formId={params.formid}
         />
       )}
-      <Link href={url}>
-        <div className='flex bg-gray-900 text-blue-200 text-sm p-3 fixed bottom-4 left-4 rounded-full'>
-          ✨ Build your AI form with formable.
-        </div>
+      <Link
+        href={process.env.NEXT_PUBLIC_BASE_URL}
+        className='flex bg-gray-900 text-blue-200 text-sm p-3 fixed bottom-4 left-4 rounded-full'
+      >
+        ✨ Build your AI form with formable.
       </Link>
     </div>
   );

@@ -1,5 +1,5 @@
 'use client';
-import { Trash2 } from 'lucide-react';
+import { Trash } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -35,7 +35,7 @@ const DeleteForm = ({ formId }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Trash2 className='text-red-500 size-5' />
+        <Trash className='size-5 text-red-500' />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

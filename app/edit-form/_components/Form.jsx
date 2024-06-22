@@ -12,8 +12,61 @@ import { Checkbox } from '@/components/ui/checkbox';
 import EditField from './EditField';
 import themes from '@/app/_data/Themes';
 import { Button } from '@/components/ui/button';
+import { useRef, useState } from 'react';
+import { db } from '@/configs';
+import { userResponses } from '@/configs/schema';
+import moment from 'moment';
+import { toast } from 'sonner';
 
-const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
+const Form = ({
+  form,
+  updateField,
+  deleteField,
+  theme,
+  editable = true,
+  formId,
+}) => {
+  const [formData, setFormData] = useState();
+  let formRef = useRef();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSelectChange = (label, value) => {
+    setFormData({ ...formData, [label]: value });
+  };
+
+  const handleCheckboxChange = (fieldName, value, checked) => {
+    const list = formData?.[fieldName] ? formData[fieldName] : [];
+    console.log(list);
+
+    if (checked) {
+      list.push(value);
+      setFormData({ ...formData, [fieldName]: list });
+    } else {
+      const result = list.filter((item) => item.label !== value);
+      setFormData({ ...formData, [fieldName]: result });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+
+    const result = await db.insert(userResponses).values({
+      jsonResponse: formData,
+      createdAt: moment().format('DD/MM/YYYY'),
+      formRef: formId,
+    });
+
+    if (result) {
+      formRef.reset();
+      toast('Form Submitted Successfully');
+    } else {
+      toast('Failed to submit form');
+    }
+  };
   let themeData = themes.find((t) => t.theme === theme);
   if (!themeData) {
     let fallback = {
@@ -29,13 +82,15 @@ const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
   }
 
   return (
-    <div
+    <form
+      ref={(r) => (formRef = r)}
       className='border-2 shadow-lg p-5 rounded-lg md:w-[600px]'
       style={{
         backgroundColor: themeData.neutral,
         color: themeData['neutral-content'],
         borderColor: themeData.primary,
       }}
+      onSubmit={handleSubmit}
     >
       <h2
         className='font-bold text-2xl text-center'
@@ -65,9 +120,13 @@ const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
                     />
                   )}
                 </div>
-                <Select>
+                <Select
+                  required={field.required}
+                  onValueChange={(v) => handleSelectChange(field.label, v)}
+                  name={field.name}
+                >
                   <SelectTrigger>
-                    <SelectValue placeholder='Select an option' />
+                    <SelectValue placeholder={field.placeholder} />
                   </SelectTrigger>
                   <SelectContent>
                     {field.options.map((option, optionIndex) => (
@@ -95,7 +154,13 @@ const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
                     className='flex items-center space-x-2 my-2'
                     key={optionIndex}
                   >
-                    <Checkbox id={option.value} />
+                    <Checkbox
+                      id={option.value}
+                      required={field.required}
+                      onCheckedChange={(v) =>
+                        handleCheckboxChange(field.label, option.label, v)
+                      }
+                    />
                     <Label htmlFor={option.value}>{option.label}</Label>
                   </div>
                 ))}
@@ -112,9 +177,16 @@ const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
                     />
                   )}
                 </div>
-                <RadioGroup>
+                <RadioGroup required={field.required}>
                   {field.options.map((option, optionIndex) => (
-                    <RadioGroupItem key={optionIndex} value={option.value}>
+                    <RadioGroupItem
+                      key={optionIndex}
+                      value={option.value}
+                      id={option.label}
+                      onClick={() =>
+                        handleSelectChange(field.label, option.label)
+                      }
+                    >
                       {option.label}
                     </RadioGroupItem>
                   ))}
@@ -137,6 +209,7 @@ const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
                   placeholder={field.placeholder}
                   required={field.required}
                   name={field.name}
+                  onChange={(e) => handleInputChange(e)}
                   className='mt-2 text-gray-900'
                 />
               </div>
@@ -144,6 +217,7 @@ const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
           </div>
         ))}
         <Button
+          type='submit'
           className='mt-4'
           style={{
             backgroundColor: themeData.primary,
@@ -153,7 +227,7 @@ const Form = ({ form, updateField, deleteField, theme, editable = true }) => {
           Submit
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

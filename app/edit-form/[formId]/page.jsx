@@ -121,6 +121,14 @@ const EditForm = ({ params }) => {
 
   const updateController = async (value, colName) => {
     try {
+      // Update local state first to reflect changes immediately
+      if (colName === 'theme') {
+        setSelectedTheme(value);
+      } else if (colName === 'background') {
+        setSelectedBackground(value);
+      }
+
+      // Update the database
       await db
         .update(JsonForms)
         .set({ [colName]: value })
@@ -131,10 +139,12 @@ const EditForm = ({ params }) => {
           )
         );
 
-      toast('Theme/Background updated successfully');
+      toast(`${colName} updated successfully`);
     } catch (error) {
-      console.error('Error updating theme/background:', error);
-      toast('An error occurred. Please try again later');
+      console.error(`Error updating ${colName}:`, error);
+      toast(
+        `An error occurred while updating ${colName}. Please try again later`
+      );
     }
   };
 
@@ -165,8 +175,8 @@ const EditForm = ({ params }) => {
         <div className='border-2 rounded-lg shadow-md h-screen p-4'>
           <Controller
             selectedTheme={(value) => {
-              updateController(value, 'theme');
               setSelectedTheme(value);
+              updateController(value, 'theme');
             }}
             selectedBackground={(value) => {
               setSelectedBackground(value);
@@ -184,6 +194,7 @@ const EditForm = ({ params }) => {
               theme={selectedTheme}
               updateField={updateField}
               deleteField={deleteField}
+              formid={record?.id}
             />
           ) : (
             <p>Loading...</p>
