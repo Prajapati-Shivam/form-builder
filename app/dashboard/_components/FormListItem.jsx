@@ -2,6 +2,8 @@ import { Edit, Share2 } from 'lucide-react';
 import React from 'react';
 import DeleteForm from './DeleteForm';
 import Link from 'next/link';
+import { RWebShare } from 'react-web-share';
+import { toast } from 'sonner';
 
 const FormListItem = ({ form, formId }) => {
   return (
@@ -22,7 +24,15 @@ const FormListItem = ({ form, formId }) => {
               </div>
             </Link>
             <div className='rounded-full hover:bg-green-500 hover:text-white p-2 transition-colors duration-300 ease-in-out'>
-              <Share2 className='size-5' />
+              <RWebShare
+                data={{
+                  // text: "Like humans, flamingos make friends for life",
+                  url: process.env.NEXT_PUBLIC_BASE_URL + '/aiform/' + formId,
+                  title: form.title,
+                }}
+              >
+                <Share2 className='size-5' />
+              </RWebShare>
             </div>
           </div>
         </div>
