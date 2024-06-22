@@ -26,7 +26,8 @@ const FormListItem = ({ form, formId }) => {
             <div className='rounded-full hover:bg-green-500 hover:text-white p-2 transition-colors duration-300 ease-in-out'>
               <RWebShare
                 data={{
-                  // text: "Like humans, flamingos make friends for life",
+                  text:
+                    form.description + ' - Build your AI form with formable.',
                   url: process.env.NEXT_PUBLIC_BASE_URL + '/aiform/' + formId,
                   title: form.title,
                 }}
