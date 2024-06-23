@@ -1,19 +1,18 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import CreateForm from './_components/CreateForm';
 import { db } from '@/configs';
 import { JsonForms } from '@/configs/schema';
 import { eq } from 'drizzle-orm';
 import { useUser } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
-import { useFormStore } from '../_store/FormStore';
-import FormListItem from './_components/FormListItem';
+import ResponseItem from './_components/ResponseItem';
+import { useFormStore } from '@/app/_store/FormStore';
 
-const Dashboard = () => {
+const Responses = () => {
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
   const forms = useFormStore((state) => state.forms);
   const setForms = useFormStore((state) => state.setForms);
+
   useEffect(() => {
     const getFormData = async () => {
       if (!user?.primaryEmailAddress?.emailAddress) return;
@@ -43,8 +42,7 @@ const Dashboard = () => {
   return (
     <div className='p-6'>
       <div className='flex items-center justify-between'>
-        <h2 className='text-3xl font-bold'>Dashboard</h2>
-        <CreateForm />
+        <h2 className='text-3xl font-bold'>Responses</h2>
       </div>
       <div className='mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
         {loading ? (
@@ -54,7 +52,7 @@ const Dashboard = () => {
         ) : forms.length > 0 ? (
           forms.map((form) => (
             <div key={form.id}>
-              <FormListItem form={JSON.parse(form.jsonform)} formId={form.id} />
+              <ResponseItem form={JSON.parse(form.jsonform)} formId={form.id} />
             </div>
           ))
         ) : (
@@ -67,4 +65,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Responses;

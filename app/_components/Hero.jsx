@@ -17,10 +17,10 @@ const Hero = () => {
           </p>
 
           <div className='mt-8 flex flex-wrap justify-center gap-4'>
-            <Link href='#'>
+            <Link href='/dashboard'>
               <Button>Create AI Form</Button>
             </Link>
-            <Link href='#'>
+            <Link href='/'>
               <Button variant='outline'>Learn More</Button>
             </Link>
           </div>

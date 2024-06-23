@@ -194,7 +194,7 @@ const EditForm = ({ params }) => {
               theme={selectedTheme}
               updateField={updateField}
               deleteField={deleteField}
-              formid={record?.id}
+              formId={record?.id}
             />
           ) : (
             <p>Loading...</p>

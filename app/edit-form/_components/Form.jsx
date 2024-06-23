@@ -39,7 +39,6 @@ const Form = ({
 
   const handleCheckboxChange = (fieldName, value, checked) => {
     const list = formData?.[fieldName] ? formData[fieldName] : [];
-    console.log(list);
 
     if (checked) {
       list.push(value);
