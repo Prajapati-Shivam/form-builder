@@ -54,7 +54,6 @@ function SideNav() {
         ))}
       </div>
       <div className='fixed bottom-0 p-4 w-64'>
-        <Button className='w-full'>+ Create Form</Button>
         <div className='my-4'>
           <Progress value={(forms.length / 3) * 100} />
           <p className='mt-2 text-gray-600 text-sm'>

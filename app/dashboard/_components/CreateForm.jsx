@@ -20,9 +20,11 @@ import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { useFormStore } from '@/app/_store/FormStore';
 
 function CreateForm() {
   const { user } = useUser();
+  const forms = useFormStore((state) => state.forms);
   const navigate = useRouter();
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -63,7 +65,7 @@ function CreateForm() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>+ Create Form</Button>
+        <Button disabled={forms.length === 3}>+ Create Form</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
