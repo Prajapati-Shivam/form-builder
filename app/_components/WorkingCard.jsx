@@ -29,11 +29,11 @@ const WorkingCard = () => {
         {steps.map((step) => (
           <div
             key={step.step}
-            className='flex flex-col p-5 gap-y-2 bg-white border-2 border-primary rounded-lg shadow-md
-            transition duration-300 ease-in-out transform hover:bg-primary hover:text-white group'
+            className='flex flex-col p-4 gap-y-2 bg-white border-2 border-primary rounded-lg shadow-md
+            transition duration-300 ease-in-out transform hover:bg-primary hover:text-white group relative overflow-hidden'
           >
-            <step.logo className='size-20 text-primary group-hover:text-white' />
-            <h3 className='text-xl font-semibold'>{step.title}</h3>
+            <step.logo className='size-20 text-primary transition-transform duration-300 group-hover:-rotate-12 group-hover:text-white absolute top-0 right-0' />
+            <h3 className='text-xl font-semibold mt-5'>{step.title}</h3>
             <p className='text-gray-800 group-hover:text-gray-200'>
               {step.description}
             </p>

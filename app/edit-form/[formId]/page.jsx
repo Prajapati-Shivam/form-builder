@@ -149,8 +149,8 @@ const EditForm = ({ params }) => {
   };
 
   return (
-    <div className='px-8 py-4'>
-      <div className='flex items-center justify-between mb-4'>
+    <div className='md:px-8 md:py-4 p-4'>
+      <div className='flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 sm:justify-between mb-4'>
         <span
           className='cursor-pointer flex items-center gap-2 hover:font-semibold'
           onClick={() => navigate.back()}
@@ -185,7 +185,7 @@ const EditForm = ({ params }) => {
           />
         </div>
         <div
-          className='md:col-span-2 border-2 rounded-lg p-5 h-full flex items-center justify-center'
+          className='md:col-span-2 border-2 rounded-lg p-4 h-full flex items-center justify-center'
           style={{ backgroundColor: selectedBackground }}
         >
           {jsonForm ? (

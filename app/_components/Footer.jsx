@@ -22,10 +22,12 @@ const socials = [
 const Footer = () => {
   return (
     <footer>
-      <div className='mt-16 border-t border-gray-100 bg-white px-4 sm:px-20 py-5 sm:flex sm:items-center sm:justify-between'>
-        <p className='text-sm'>&copy; 2024 Formable. All rights reserved.</p>
+      <div className='mt-16 bg-white px-4 sm:px-20 py-5 sm:flex sm:items-center sm:justify-between'>
+        <p className='text-md text-center sm:text-start'>
+          &copy; 2024 Formable. All rights reserved.
+        </p>
 
-        <ul className='mt-8 flex justify-center gap-6 sm:mt-0 lg:justify-end'>
+        <ul className='mt-4 flex justify-center gap-6 sm:mt-0 lg:justify-end'>
           {socials.map((social) => (
             <li key={social.name}>
               <Link

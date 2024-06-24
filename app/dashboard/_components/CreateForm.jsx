@@ -65,36 +65,56 @@ function CreateForm() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button disabled={forms.length === 3}>+ Create Form</Button>
+        <Button>+ Create Form</Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create New Form</DialogTitle>
-          <DialogDescription>
-            <Textarea
-              onChange={(e) => setUserInput(e.target.value)}
-              value={userInput}
-              placeholder='Enter your prompt here...'
-              className='my-4'
-            />
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='destructive'>Cancel</Button>
-          </DialogClose>
-          <Button disabled={loading} onClick={() => handleSubmit(userInput)}>
-            {loading ? (
-              <>
-                <LoaderCircle size={24} className='animate-spin' />
-                <span className='ml-2'>Creating...</span>
-              </>
-            ) : (
-              'Create Form'
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
+      {forms.length < 3 ? (
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create New Form</DialogTitle>
+            <DialogDescription>
+              <Textarea
+                onChange={(e) => setUserInput(e.target.value)}
+                value={userInput}
+                placeholder='Enter your prompt here...'
+                className='my-4'
+              />
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className='flex flex-row justify-center gap-2'>
+            <DialogClose asChild>
+              <Button variant='destructive'>Cancel</Button>
+            </DialogClose>
+            <Button disabled={loading} onClick={() => handleSubmit(userInput)}>
+              {loading ? (
+                <>
+                  <LoaderCircle size={24} className='animate-spin' />
+                  <span className='ml-2'>Creating...</span>
+                </>
+              ) : (
+                'Create Form'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      ) : (
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Upgrade to create unlimited forms</DialogTitle>
+            <DialogDescription>
+              You have reached the limit of creating 3 forms. Upgrade to create
+              unlimited forms.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className='flex flex-row justify-center gap-2'>
+            <DialogClose asChild>
+              <Button variant='destructive'>Cancel</Button>
+            </DialogClose>
+            <Button onClick={() => navigate.push('/dashboard/upgrade')}>
+              Upgrade
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      )}
     </Dialog>
   );
 }

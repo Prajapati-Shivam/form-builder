@@ -27,11 +27,11 @@ const plans = [
 ];
 const Upgrade = () => {
   return (
-    <div className='p-6'>
+    <div className='p-4 md:p-6'>
       <div className='flex items-center justify-between'>
-        <h2 className='text-3xl font-bold'>Upgrade</h2>
+        <h2 className='text-2xl md:text-3xl font-bold'>Upgrade</h2>
       </div>
-      <div className='mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-center justify-center w-full'>
+      <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-center justify-center w-full'>
         {plans.map((plan, index) => (
           <div
             key={index}

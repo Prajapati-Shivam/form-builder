@@ -27,7 +27,7 @@ const LivePreview = ({ params }) => {
 
   return (
     <div
-      className='p-10 flex items-center justify-center h-full'
+      className='px-8 pt-10 pb-20 md:pt-10 md:pb-20 flex flex-col gap-2 items-center justify-center h-full'
       style={
         record?.background === 'none' ? {} : { background: record?.background }
       }
@@ -44,7 +44,7 @@ const LivePreview = ({ params }) => {
       )}
       <Link
         href={process.env.NEXT_PUBLIC_BASE_URL}
-        className='flex bg-gray-900 text-blue-200 text-sm p-3 fixed bottom-4 left-4 rounded-full'
+        className='flex bg-gray-900 text-blue-200 text-sm p-3 rounded-full fixed sm:left-4 bottom-4'
       >
         ✨ Build your AI form with formable.
       </Link>

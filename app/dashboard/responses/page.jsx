@@ -6,6 +6,7 @@ import { eq } from 'drizzle-orm';
 import { useUser } from '@clerk/nextjs';
 import ResponseItem from './_components/ResponseItem';
 import { useFormStore } from '@/app/_store/FormStore';
+import { Loader2 } from 'lucide-react';
 
 const Responses = () => {
   const { user } = useUser();
@@ -40,15 +41,16 @@ const Responses = () => {
   }, [user?.primaryEmailAddress?.emailAddress, setForms]);
 
   return (
-    <div className='p-6'>
+    <div className='md:p-6 p-4'>
       <div className='flex items-center justify-between'>
-        <h2 className='text-3xl font-bold'>Responses</h2>
+        <h2 className='text-2xl md:text-3xl font-bold'>Responses</h2>
       </div>
-      <div className='mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+      <div className='mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
         {loading ? (
-          <p className='font-semibold text-lg text-center col-span-full'>
-            Loading...
-          </p>
+          <div className='font-semibold flex items-center gap-x-2 text-lg text-center col-span-full'>
+            <Loader2 className='size-5 animate-spin' />
+            <span>Loading...</span>
+          </div>
         ) : forms.length > 0 ? (
           forms.map((form) => (
             <div key={form.id}>

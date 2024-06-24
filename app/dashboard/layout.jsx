@@ -9,7 +9,7 @@ function DashboardLayout({ children }) {
         <div className='md:w-64 fixed'>
           <SideNav />
         </div>
-        <div className='md:ml-64'>{children}</div>
+        <div className='ml-16 md:ml-64'>{children}</div>
       </div>
     </SignedIn>
   );

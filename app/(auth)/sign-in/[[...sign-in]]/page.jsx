@@ -10,7 +10,6 @@ export default function Page() {
             src='/form_image.jpg'
             alt='form image'
             layout='fill'
-            objectFit='cover'
             className='absolute inset-0 h-full w-full object-cover opacity-80'
             quality={100}
             priority={true}
@@ -36,7 +35,7 @@ export default function Page() {
             </h2>
 
             <p className='mt-4 leading-relaxed text-white/90'>
-              Get started with Formable and create your own forms in minutes.
+              Get started with Formable and create your own forms in seconds.
             </p>
           </div>
         </section>
@@ -63,12 +62,11 @@ export default function Page() {
               </a>
 
               <h1 className='mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl'>
-                Welcome to Squid 🦑
+                Welcome to Formable 🚀
               </h1>
 
-              <p className='mt-4 leading-relaxed text-gray-500'>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
+              <p className='my-4 leading-relaxed text-gray-500'>
+                Get started with Formable and create your own forms in seconds.
               </p>
             </div>
 

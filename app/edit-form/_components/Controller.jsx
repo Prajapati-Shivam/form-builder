@@ -14,7 +14,7 @@ const Controller = ({ selectedTheme, selectedBackground }) => {
   const [showMore, setShowMore] = useState(6);
   return (
     <div>
-      <h2 className='font-semibold text-xl my-2'>Select Theme</h2>
+      <h2 className='font-semibold text-xl mb-2'>Select Theme</h2>
       <Select onValueChange={(value) => selectedTheme(value)}>
         <SelectTrigger className='w-full'>
           <SelectValue placeholder='Theme' />
@@ -57,8 +57,8 @@ const Controller = ({ selectedTheme, selectedBackground }) => {
         </SelectContent>
       </Select>
 
-      <h2 className='font-semibold text-xl my-2'>Select Background</h2>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-2'>
+      <h2 className='font-semibold text-xl mt-4 mb-2'>Select Background</h2>
+      <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
         {backgrounds.map(
           (background, index) =>
             index < showMore && (
