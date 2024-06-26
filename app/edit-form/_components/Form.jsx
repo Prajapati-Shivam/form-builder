@@ -137,33 +137,47 @@ const Form = ({
                 </Select>
               </div>
             ) : field.type === 'checkbox' ? (
-              <div className='my-4 w-full'>
-                <div className='flex items-center justify-between'>
-                  <Label>{field.label}</Label>
-                  {editable && (
-                    <EditField
-                      defaultValue={field}
-                      updateFields={(value) => updateField(value, index)}
-                      deleteField={() => deleteField(index)}
-                    />
-                  )}
-                </div>
-                {field.options.map((option, optionIndex) => (
-                  <div
-                    className='flex items-center space-x-2 my-2'
-                    key={optionIndex}
-                  >
-                    <Checkbox
-                      id={option.value}
-                      required={field.required}
-                      onCheckedChange={(v) =>
-                        handleCheckboxChange(field.label, option.label, v)
-                      }
-                    />
-                    <Label htmlFor={option.value}>{option.label}</Label>
+              field.options && field.options.length > 0 ? (
+                <div className='my-4 w-full'>
+                  <div className='flex items-center justify-between'>
+                    <Label>{field.label}</Label>
+                    {editable && (
+                      <EditField
+                        defaultValue={field}
+                        updateFields={(value) => updateField(value, index)}
+                        deleteField={() => deleteField(index)}
+                      />
+                    )}
                   </div>
-                ))}
-              </div>
+
+                  {field.options.map((option, optionIndex) => (
+                    <div
+                      className='flex items-center space-x-2 my-2'
+                      key={optionIndex}
+                    >
+                      <Checkbox
+                        id={option.value}
+                        required={field.required}
+                        onCheckedChange={(v) =>
+                          handleCheckboxChange(field.label, option.label, v)
+                        }
+                      />
+                      <Label htmlFor={option.value}>{option.label}</Label>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className='flex items-center space-x-2 my-2'>
+                  <Checkbox
+                    id={field.name}
+                    required={field.required}
+                    onCheckedChange={(v) =>
+                      handleCheckboxChange(field.name, option.label, v)
+                    }
+                  />
+                  <Label htmlFor={field.name}>{field.label}</Label>
+                </div>
+              )
             ) : field.type === 'radio' ? (
               <div className='my-4 w-full'>
                 <div className='flex items-center justify-between'>

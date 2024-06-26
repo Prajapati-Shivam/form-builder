@@ -12,6 +12,7 @@ import Controller from '../_components/Controller';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useFormStore } from '@/app/_store/FormStore';
+import { RWebShare } from 'react-web-share';
 
 const EditForm = ({ params }) => {
   const { user } = useUser();
@@ -165,14 +166,22 @@ const EditForm = ({ params }) => {
               Live Preview
             </Button>
           </Link>
-          <Button className='bg-green-500 hover:bg-green-600'>
-            <Share2 className='size-5 mr-2' />
-            Share
-          </Button>
+          <RWebShare
+            data={{
+              text: 'Build your AI form with formable.',
+              url: process.env.NEXT_PUBLIC_BASE_URL + '/aiform/' + record?.id,
+              title: formTitle,
+            }}
+          >
+            <Button className='bg-green-500 hover:bg-green-600'>
+              <Share2 className='size-5 mr-2' />
+              Share
+            </Button>
+          </RWebShare>
         </div>
       </div>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-5'>
-        <div className='border-2 rounded-lg shadow-md h-screen p-4'>
+        <div className='border-2 rounded-lg shadow-md md:h-screen p-4'>
           <Controller
             selectedTheme={(value) => {
               setSelectedTheme(value);
